@@ -31,7 +31,25 @@ A Blank Document opens up into which the following source code can be typed.
 
 ## Source Code – Using Case Statement :
 
-(Include program here)
+module alu_32bit_case(y,a,b,f);
+input [31:0]a;
+input [31:0]b;
+input [2:0]f;
+output reg [31:0]y;
+always@(*)
+begin
+case(f)
+3'b000:y=a&b; //AND Operation
+3'b001:y=a|b; //OR Operation
+3'b010:y=~(a&b); //NAND Operation
+3'b011:y=~(a|b); //NOR Operation
+3'b100:y=a^b; //XOR Operation
+3'b101:y=~(a^b); //XNOR Operation
+3'b110:y=~a; //NOT of a
+3'b111:y=~b; //NOT of b
+endcase
+end
+endmodule
 
 Use the Save option or Ctrl+S to save the code, or click on the save option from the top-right corner and close the text file.
 
@@ -40,8 +58,28 @@ Use the Save option or Ctrl+S to save the code, or click on the save option from
 Similarly, create your test bench using gedit <filename_tb>.v to open a new blank document (alu_32bit_tb_case).
 
 ## Test Bench :
+module alu_32bit_tb_case;
+reg [31:0]a;
+reg [31:0]b;
+reg [2:0]f;
+wire [31:0]y;
+alu_32bit_case test2(.y(y),.a(a),.b(b),.f(f));
+initial
+begin
+a=32'h00000000;
+b=32'h10101010;
+#10 f=3'b000;
+#10 f=3'b001;
+#10 f=3'b010;
+#10 f=3'b011;
+#10 f=3'b100;
+#10 f=3'b101;
+#10 f=3'b110;
+#10 f=3'b111;
+#50 $finish;
+end
+endmodule
 
-(Include test bench program here)
 
 Use the Save option or Ctrl+S to save the code, or click on the save option from the top-right corner and close the text file.
 
@@ -56,6 +94,8 @@ source /cadence/install/cshrc (mention the path of the tools)
 (The path of cshrc could vary depending on the installation destination)
 
 After this, you can see the window like below
+![WhatsApp Image 2025-10-17 at 21 45 43_15ece8fe](https://github.com/user-attachments/assets/df9b0511-b7e1-4a74-88ad-5e83d8092f72)
+
 
 #### Fig 2: Invoke the Cadence Environment
 
@@ -68,12 +108,17 @@ or
 •linux:/> nclaunch& // On subsequent calls to NCVERILOG
 
 It will invoke the nclaunch window for functional simulation. We can compile, elaborate and simulate it using Multiple Steps.
+![WhatsApp Image 2025-10-17 at 21 49 04_5450eb8a](https://github.com/user-attachments/assets/f8cebf16-e185-4724-9337-5cc8cc0d3217)
+
 
 #### Fig 3: Setting Multi-step simulation
 
 Select Multiple Step and then select “Create cds.lib File” as shown in the figure below
 
 Click the .cds.lib file and save the file by clicking on the Save option
+
+![WhatsApp Image 2025-10-17 at 21 51 50_e061fb22](https://github.com/user-attachments/assets/c71387ce-a6c2-4e15-8b7b-f56ce0a71a26)
+
 
 #### Fig 4:cds.lib file Creation
 Save .lib file and select the correct option for cds.lib file format based on the HDL Language and Libraries used.
@@ -92,6 +137,8 @@ Left side, you can see the HDL files. The right side of the window has Worklib a
 Worklib is the directory where all the compiled codes are stored, while Snapshot will have the output of elaboration, which in turn goes for simulation.
 
 To perform the function simulation, the following three steps are involved: Compilation, Elaboration and Simulation.
+
+![WhatsApp Image 2025-10-17 at 21 53 53_bc47eda0](https://github.com/user-attachments/assets/e7e306e3-5c26-44b6-8df6-33e3c0630376)
 
 #### Fig 6: Nclaunch Window
 
@@ -120,6 +167,7 @@ After compilation, it will come under worklib. You can see on the right side win
 select the test bench and compile it. It will come under Worklib. Under Worklib, you can see the module and test bench.
 
 The cds.lib file is an ASCII text file. It defines which libraries are accessible and where they are located. It contains statements that map logical library names to their physical directory paths. For this Design, you will define a library called “worklib”
+![WhatsApp Image 2025-10-17 at 21 55 22_98eef2a1](https://github.com/user-attachments/assets/c844051a-96b2-481f-b291-e3be4945b92a)
 
 ### Step 2: Elaboration:
 To check the port connections in a hierarchical design
@@ -142,6 +190,8 @@ Outputs: Elaborate database updated in the mapped library if successful, generat
 5.It also establishes net connectivity and prepares all of this for simulation
 
 After elaboration, the file will come under snapshot. Select the test bench and simulate it.
+![WhatsApp Image 2025-10-17 at 21 56 16_6c38182c](https://github.com/user-attachments/assets/db54faf9-b793-41b5-b1da-8bb64845ce76)
+
 
 #### Fig 8: Elaboration Launch Option
 
@@ -155,10 +205,13 @@ Outputs: Simulation log file, waveforms for debugging
 Simulations allow dumping design and test bench signals into a waveform
 
 Steps for simulation – Run the simulation command with simulator options
+![WhatsApp Image 2025-10-17 at 21 57 37_e3e2be95](https://github.com/user-attachments/assets/d37d4a4f-6699-49ac-8366-b400c25af984)
+
 
 #### Fig 9: Design Browser window for simulation
 
 #### Fig 10: Simulation Waveform Window
+
 
 Synthesis requires three files as follows,
 
